@@ -1,30 +1,16 @@
-const path = require("path");
-
 const express = require("express");
 const router = express.Router();
 
-const VIEWS_NAME = "views";
-const USER_LOGIN_FILE = "login";
-const USER_SIGNUP_FILE = "signup";
-const AUTH_FOLDER = "auth";
+//Controller Imports
+const userController = require("../controllers/user");
 
 //login
-router.get("/login", (req, res, next) => {
-    res.render(
-        path.join(__dirname, "..", VIEWS_NAME, AUTH_FOLDER, USER_LOGIN_FILE),
-        { pageTitle: "Login" }
-    );
-});
+router.get("/login", userController.getLogin);
 
 //signup
-router.get("/signup", (req, res, next) => {
-    res.render(
-        path.join(__dirname, "..", VIEWS_NAME, AUTH_FOLDER, USER_SIGNUP_FILE),
-        { pageTitle: "Signup" }
-    );
-});
+router.get("/signup", userController.getSignup);
 
 //logout
-router.get("/logout");
+router.get("/logout", userController.getLogout);
 
 module.exports = router;
