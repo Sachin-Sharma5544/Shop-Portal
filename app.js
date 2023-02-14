@@ -13,8 +13,10 @@ const shopRoute = require("./routes/shop");
 //Variable Declarations
 const VIEW_ENGINE = "view engine";
 const TEMPLT_ENGINE = "ejs";
+const VIEWS_NAME = "views";
 const SERVER_START_MSG = "Server started & listening to port";
 const PUBLIC_FOLDER_NAME = "public";
+const ERROR_FILE_NAME = "404";
 
 //Middlewares
 
@@ -24,6 +26,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/admin", adminRoute);
 app.use("/shop", shopRoute);
+app.use((req, res, next) => {
+    res.render(path.join(__dirname, VIEWS_NAME, ERROR_FILE_NAME));
+});
 
 app.listen(process.env.PORT, () => {
     console.log(`${SERVER_START_MSG} ${process.env.PORT} `);
