@@ -11,6 +11,8 @@ const adminRoute = require("./routes/admin");
 const shopRoute = require("./routes/shop");
 const userRoute = require("./routes/user");
 
+const connectMongo = require("./database/database");
+
 //Variable Declarations
 const VIEW_ENGINE = "view engine";
 const TEMPLT_ENGINE = "ejs";
@@ -33,8 +35,11 @@ app.use((req, res, next) => {
     res.render(path.join(__dirname, VIEWS_NAME, ERROR_FILE_NAME));
 });
 
-app.listen(process.env.PORT, () => {
-    console.log(`${SERVER_START_MSG} ${process.env.PORT} `);
+connectMongo().then(() => {
+    console.log("Database connected successfully");
+    app.listen(process.env.PORT, () => {
+        console.log(`${SERVER_START_MSG} ${process.env.PORT} `);
+    });
 });
 
 // app.set(process.env.VIEW_ENGINE, process.env.TEMPLT_ENGINE);
