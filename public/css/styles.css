@@ -7,7 +7,11 @@
 
 .myCardButton {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+}
+
+.myCardButton > * {
+    margin: 0 0.4rem;
 }
 
 
