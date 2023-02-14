@@ -9,6 +9,7 @@ const ADMIN_ADDPRODUCT_FILE = "admin-addproduct";
 
 const products = [1, 2, 3, 4, 5, 6];
 
+//products
 router.get("/products", (req, res, next) => {
     res.render(
         path.join(
@@ -22,6 +23,7 @@ router.get("/products", (req, res, next) => {
     );
 });
 
+//Add Product
 router.get("/addproduct", (req, res, next) => {
     res.render(
         path.join(

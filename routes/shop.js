@@ -9,17 +9,21 @@ const SHOP_CART_FILE = "cart";
 const SHOP_ORDERS_FILE = "orders";
 const SHOP_FOLDER = "shop";
 
+const products = [1, 2, 3, 4, 5, 6, 7];
+
 //details page
 router.get("/", (req, res, next) => {
     res.render(
-        path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_DETAILS_FILE)
+        path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_DETAILS_FILE),
+        { pageTitle: "Shop Products", products: products }
     );
 });
 
 //products page
 router.get("/products", (req, res, next) => {
     res.render(
-        path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_PRODUCTS_FILE)
+        path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_PRODUCTS_FILE),
+        { pageTitle: "Shop Products", products: products }
     );
 });
 
