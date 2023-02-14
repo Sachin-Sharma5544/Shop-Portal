@@ -6,22 +6,24 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 
+//Project Imports
+const adminRoute = require("./routes/admin");
+const shopRoute = require("./routes/shop");
+
 //Variable Declarations
 const VIEW_ENGINE = "view engine";
 const TEMPLT_ENGINE = "ejs";
 const SERVER_START_MSG = "Server started & listening to port";
-const VIEWS_NAME = "views";
-const TEST_FILE = "test";
 const PUBLIC_FOLDER_NAME = "public";
 
 //Middlewares
 
 app.set(VIEW_ENGINE, TEMPLT_ENGINE);
 app.use(express.static(path.join(__dirname, PUBLIC_FOLDER_NAME)));
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res, next) => {
-    res.render(path.join(__dirname, VIEWS_NAME, TEST_FILE));
-});
+app.use("/admin", adminRoute);
+app.use("/shop", shopRoute);
 
 app.listen(process.env.PORT, () => {
     console.log(`${SERVER_START_MSG} ${process.env.PORT} `);
