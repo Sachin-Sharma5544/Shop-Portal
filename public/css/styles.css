@@ -1,3 +1,11 @@
-h1 {
-    color:red;
+.myCard__row .card{
+    margin: 0.3rem 0.5rem;
+
 }
+
+.myCardButton {
+    display: flex;
+    justify-content: space-between;
+}
+
+
