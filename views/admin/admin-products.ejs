@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Products Page</title>
+    <title><%= pageTitle%> Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -15,25 +15,28 @@
         <div class="container ">
 
             <div class="myCard__wrapper">
-                <h1 class="text-center mt-5 mb-5">Admin Products page</h1>
+                <h1 class="text-center mt-5 mb-5"><%= pageTitle%> page</h1>
 
-                <div class="row myCard__row">
-
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                        <div class="card" >
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhze-QNnca2liBrhRj4CjswGZSkqbhvSDJsQ&usqp=CAU" class="card-img-top" alt="...">
-                            <div class="card-body">
-                              <h5 class="card-title">Card title</h5>
-                              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                              <div class="myCardButton">
-                                    <a href="#" class="btn btn-primary">Update</a>
-                                    <a href="#" class="btn btn-primary">Delete</a>
-                              </div>
+                <% if (products.length > 0 ) { %>
+                    <div class="row myCard__row">
+                        <% products.forEach( product => { %>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                <div class="card" >
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhze-QNnca2liBrhRj4CjswGZSkqbhvSDJsQ&usqp=CAU" class="card-img-top" alt="...">
+                                    <div class="card-body">
+                                    <h5 class="card-title">Card title</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    <div class="myCardButton">
+                                            <a href="#" class="btn btn-primary">Update</a>
+                                            <a href="#" class="btn btn-primary">Delete</a>
+                                    </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        <% }) %>
+                    </div> 
+                <% } %>
 
-                </div> 
             </div>
 
         </div>

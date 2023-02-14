@@ -7,6 +7,8 @@ const ADMIN_PRODUCTS_FILE = "admin-products";
 const ADMIN_FOLDER = "admin";
 const ADMIN_ADDPRODUCT_FILE = "admin-addproduct";
 
+const products = [1, 2, 3, 4, 5, 6];
+
 router.get("/products", (req, res, next) => {
     res.render(
         path.join(
@@ -15,7 +17,8 @@ router.get("/products", (req, res, next) => {
             VIEWS_NAME,
             ADMIN_FOLDER,
             ADMIN_PRODUCTS_FILE
-        )
+        ),
+        { pageTitle: "Admin Products", products: products }
     );
 });
 
@@ -27,7 +30,8 @@ router.get("/addproduct", (req, res, next) => {
             VIEWS_NAME,
             ADMIN_FOLDER,
             ADMIN_ADDPRODUCT_FILE
-        )
+        ),
+        { pageTitle: "Add Product" }
     );
 });
 

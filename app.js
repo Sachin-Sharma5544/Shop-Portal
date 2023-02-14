@@ -9,6 +9,7 @@ const app = express();
 //Project Imports
 const adminRoute = require("./routes/admin");
 const shopRoute = require("./routes/shop");
+const userRoute = require("./routes/user");
 
 //Variable Declarations
 const VIEW_ENGINE = "view engine";
@@ -26,6 +27,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/admin", adminRoute);
 app.use("/shop", shopRoute);
+app.use("/user", userRoute);
+
 app.use((req, res, next) => {
     res.render(path.join(__dirname, VIEWS_NAME, ERROR_FILE_NAME));
 });
