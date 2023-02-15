@@ -16,27 +16,28 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-3 col-sm-0 col-xs-0"></div>
                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <form action="/admin/addproduct" method="POST">
+                        <form action="/admin/updateproduct" method="POST">
                             <div class="mb-3">
                               <label for="title" class="form-label">Product Title: </label>
-                              <input type="text" class="form-control" id="title" name ="title" placeholder="Enter product title">
+                              <input type="text" class="form-control" id="title" name ="title" placeholder="Enter product title" value="<%= product.title %>">
                             </div>
 
                             <div class="mb-3">
                               <label for="price" class="form-label">Product Price: </label>
-                              <input type="number" class="form-control" id="price" name="price" placeholder="Enter product price">
+                              <input type="number" class="form-control" id="price" name="price" placeholder="Enter product price" value="<%= product.price %>">
                             </div>
 
                             <div class="mb-3">
                                 <label for="imageurl" class="form-label">Image URL: </label>
-                                <input type="text" class="form-control" id="imageurl" name="imageurl" placeholder="Enter image url">
+                                <input type="text" class="form-control" id="imageurl" name="imageurl" placeholder="Enter image url" value="<%= product.imageurl %>">
                             </div>
 
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description: </label>
-                                <textarea type="text" class="form-control" id="description" name="description" placeholder="Enter product description" cols="50"></textarea>
+                                <textarea type="text" class="form-control" id="description" name="description" placeholder="Enter product description" cols="50"><%= product.description %></textarea>
                             </div>
-                            
+
+                            <input type="hidden" id="id" name="id" value="<%= product._id %>">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
