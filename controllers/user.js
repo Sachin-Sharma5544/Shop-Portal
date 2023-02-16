@@ -13,10 +13,40 @@ const AUTH_FOLDER = "auth";
 
 //login
 exports.getLogin = (req, res, next) => {
+    console.log(req);
+    console.log(req.session.isLoggedIn);
+
     res.render(
         path.join(__dirname, "..", VIEWS_NAME, AUTH_FOLDER, USER_LOGIN_FILE),
         { pageTitle: "Login" }
     );
+};
+
+exports.postLogin = (req, res, next) => {
+    const { email, password } = req.body;
+    User.findOne({ email: email })
+        .then((user) => {
+            // console.log(user);
+            if (!user) {
+                return res.redirect("/user/login");
+            }
+
+            bcrypt
+                .compare(password, user.password)
+                .then((doMatch) => {
+                    if (doMatch) {
+                        req.session.isLoggedIn = true;
+                        req.session.user = user;
+                        return req.session.save((err) => {
+                            console.log(err);
+                            res.redirect("/shop/products");
+                        });
+                    }
+                    res.redirect("/user/login");
+                })
+                .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
 };
 
 //signup
@@ -36,7 +66,6 @@ exports.postSignup = (req, res, next) => {
             if (user) {
                 return res.redirect("/user/signup");
             }
-
             bcrypt
                 .hash(password, 12)
                 .then((hashPassword) => {
@@ -56,5 +85,7 @@ exports.postSignup = (req, res, next) => {
 
 //logout
 exports.getLogout = (req, res, next) => {
-    console.log("logout clicked");
+    req.session.destroy((err) => {
+        res.redirect("/user/login");
+    });
 };

@@ -2,6 +2,8 @@
 const path = require("path");
 
 // Third party package imports
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
 require("dotenv").config();
 const express = require("express");
 const app = express();
@@ -23,9 +25,22 @@ const ERROR_FILE_NAME = "404";
 
 //Middlewares
 
+const store = MongoDBStore({
+    uri: process.env.MONGODB_CONNECT_URI,
+    collection: "session",
+});
+
 app.set(VIEW_ENGINE, TEMPLT_ENGINE);
 app.use(express.static(path.join(__dirname, PUBLIC_FOLDER_NAME)));
 app.use(express.urlencoded({ extended: true }));
+app.use(
+    session({
+        secret: "My Secret is this",
+        resave: false,
+        saveUninitialized: false,
+        store: store,
+    })
+);
 
 app.use("/admin", adminRoute);
 app.use("/shop", shopRoute);
