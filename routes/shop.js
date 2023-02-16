@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+//Middleware Import
+const isAuth = require("../middleware/isAuth");
+
 //Controller Imports
 const shopController = require("../controllers/shop");
 
@@ -11,12 +14,12 @@ router.get("/", shopController.getShopDetails);
 router.get("/products", shopController.getShopProducts);
 
 //product detai
-router.get("/product/:id", shopController.getShopProduct);
+router.get("/product/:id", isAuth, shopController.getShopProduct);
 
 //cart page
-router.get("/cart", shopController.getCart);
+router.get("/cart", isAuth, shopController.getCart);
 
 //orders page
-router.get("/orders", shopController.getOrders);
+router.get("/orders", isAuth, shopController.getOrders);
 
 module.exports = router;
