@@ -16,11 +16,11 @@
         <div class="container ">
 
             <div class="myCard__wrapper">
-                <h1 class="text-center mt-5 mb-5"><%= pageTitle %> Page</h1>
+                <h1 class="text-center mt-5 mb-5 text-danger"><%= pageTitle %> Page</h1>
                 <% if (product) { %>
                     <div class="row myCard__row">
-                        <div class="col-lg-3 col-md-2 col-sm-2 col-xs-12"></div>
-                        <div class="col-lg-6 col-md-8 col-sm-8 col-xs-12">
+                        <div class="col-lg-4 col-md-2 col-sm-2 col-xs-12"></div>
+                        <div class="col-lg-4 col-md-8 col-sm-8 col-xs-12">
                             <div class="card" >
                                 <img src="<%= product.imageurl %>" class="card-img-top" alt="...">
                                 <div class="card-body">
@@ -33,7 +33,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3 col-md-2 col-sm-2 col-xs-12"></div>
+                        <div class="col-lg-4 col-md-2 col-sm-2 col-xs-12"></div>
                     </div> 
                 <% } else { %>
                     <p>Currently we don't have any products to display</p>

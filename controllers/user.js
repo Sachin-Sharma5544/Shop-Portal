@@ -13,9 +13,6 @@ const AUTH_FOLDER = "auth";
 
 //login
 exports.getLogin = (req, res, next) => {
-    console.log(req);
-    console.log(req.session.isLoggedIn);
-
     res.render(
         path.join(__dirname, "..", VIEWS_NAME, AUTH_FOLDER, USER_LOGIN_FILE),
         { pageTitle: "Login" }
@@ -38,7 +35,6 @@ exports.postLogin = (req, res, next) => {
                         req.session.isLoggedIn = true;
                         req.session.user = user;
                         return req.session.save((err) => {
-                            console.log(err);
                             res.redirect("/shop/products");
                         });
                     }
@@ -53,7 +49,7 @@ exports.postLogin = (req, res, next) => {
 exports.getSignup = (req, res, next) => {
     res.render(
         path.join(__dirname, "..", VIEWS_NAME, AUTH_FOLDER, USER_SIGNUP_FILE),
-        { pageTitle: "Signup" }
+        { pageTitle: "Sign Up" }
     );
 };
 

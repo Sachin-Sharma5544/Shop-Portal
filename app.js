@@ -42,6 +42,12 @@ app.use(
     })
 );
 
+//this middleware is registered for sending data to all the pages
+app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    next();
+});
+
 app.use("/admin", adminRoute);
 app.use("/shop", shopRoute);
 app.use("/user", userRoute);
