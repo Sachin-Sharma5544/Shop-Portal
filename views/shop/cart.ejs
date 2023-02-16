@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Products </title>
+    <title><%= pageTitle %> Page </title>
     <script src="https://kit.fontawesome.com/4e0194f4de.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/styles.css">
@@ -17,52 +17,61 @@
         <div class="container ">
 
             <div class="myCart__wrapper">
-                <h1 class="text-center mt-5 mb-5 text-danger">Cart Page</h1>
+                <h1 class="text-center mt-5 mb-5 text-danger"><%= pageTitle %> Page</h1>
                 <div class="container" >
 
                     
                     <div class="cart-body__wrapper">
                         <!-- Header -->
-                        <div class="row cart-body-header bg-danger mx-1 text-light text-center">
-                            <div class=" col-2 cart-prod-image" >Image</div>
-                            <div class=" col-3 cart-prod-details">Product Details</div>
-                            <div class="col-3 cart-prod-qty">Quantity</div>
-                            <div class="col-2 cart-prod-total-price">Total price</div>
-                            <div class="col-2 cart-prod-total-price">Remove </div>
-                        </div>
-
-                        <!-- Cart Item -->
-                        <div class="cart-item">
-                            <div class="row cart-body text-center">
-                                <div class=" col-2 cart-prod-image" >
-                                    <img height="100rem" src="data:image/png;base64,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" alt="">
-                                </div>
-                                <div class=" col-3 cart-prod-details">
-                                    <h6>Elephant</h6>
-                                    <p>Price: 30</p>
-                                </div>
-                                <div class="col-3 cart-prod-qty">
-                                    <span class="decrease-qty">
-                                        <form action="/shop/cart">
-                                            <button type="submit">&minus;</button>
-                                        </form>
-                                    </span>
-                                    <span class="present-quantity"> &nbsp; 1 &nbsp;</span>
-                                    <span class="increase-qty">
-                                        <form action="/shop/cart">
-                                            <button type="submit">&plus;</button>
-                                        </form>
-                                    </span>
-                                </div>
+                        <% if (products.length > 0 ) { %>
+                        
+                            <div class="row cart-body-header bg-danger mx-1 text-light text-center">
+                                <div class=" col-2 cart-prod-image" >Image</div>
+                                <div class=" col-3 cart-prod-details">Product Details</div>
+                                <div class="col-3 cart-prod-qty">Quantity</div>
                                 <div class="col-2 cart-prod-total-price">Total price</div>
-                                <div class="col-2 cart-prod-remove">
-                                    <form action="/shop/cart" method="GET">
-                                        <button type="submit" ><i class="fa-solid fa-trash"></i></button>
-                                    </form>
-                                </div>
+                                <div class="col-2 cart-prod-total-price">Remove </div>
                             </div>
 
-                        </div>
+                            <!-- Cart Item -->
+                            <% products.forEach( product => { %>
+                                <div class="cart-item">
+                                    <div class="row cart-body text-center">
+                                        <div class=" col-2 cart-prod-image" >
+                                            <img height="100rem" src="data:image/png;base64,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" alt="">
+                                        </div>
+                                        <div class=" col-3 cart-prod-details">
+                                            <h6>Elephant</h6>
+                                            <p>Price: 30</p>
+                                        </div>
+                                        <div class="col-3 cart-prod-qty">
+                                            <span class="decrease-qty">
+                                                <form action="/shop/cart">
+                                                    <button type="submit">&minus;</button>
+                                                </form>
+                                            </span>
+                                            <span class="present-quantity"> &nbsp; 1 &nbsp;</span>
+                                            <span class="increase-qty">
+                                                <form action="/shop/cart">
+                                                    <button type="submit">&plus;</button>
+                                                </form>
+                                            </span>
+                                        </div>
+                                        <div class="col-2 cart-prod-total-price">Total price</div>
+                                        <div class="col-2 cart-prod-remove">
+                                            <form action="/shop/cart" method="GET">
+                                                <button type="submit" ><i class="fa-solid fa-trash"></i></button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            <%  }) %>
+
+                        <% } else { %>
+                            <p>Your cart is empty. Please add items in cart and enjoy shopping with us.</p>
+                        <% }  %>
+                        
                         
                     </div>
                     

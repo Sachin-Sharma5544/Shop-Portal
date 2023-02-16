@@ -70,8 +70,10 @@ exports.getShopProduct = (req, res, next) => {
 
 //cart page
 exports.getCart = (req, res, next) => {
+    let products = [];
     res.render(
-        path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_CART_FILE)
+        path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_CART_FILE),
+        { pageTitle: "Cart Information", products: products }
     );
 };
 
