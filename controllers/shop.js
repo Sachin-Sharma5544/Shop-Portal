@@ -70,17 +70,53 @@ exports.getShopProduct = (req, res, next) => {
 
 //cart page
 exports.getCart = (req, res, next) => {
-    let products = [1, 2, 3, 4, 5, 6, 7, 87];
-    res.render(
-        path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_CART_FILE),
-        { pageTitle: "Cart Information", products: products }
-    );
+    req.user
+        .populate("cart.items.productId")
+        .then((user) => {
+            return user.cart.items;
+        })
+        .then((products) => {
+            res.render(
+                path.join(
+                    __dirname,
+                    "..",
+                    VIEWS_NAME,
+                    SHOP_FOLDER,
+                    SHOP_CART_FILE
+                ),
+                { pageTitle: "Cart Information", products: products }
+            );
+        })
+        .catch((err) => console.log(err));
 };
 
 exports.postCart = (req, res, next) => {
     const id = req.body.id;
-    console.log(id);
-    console.log("clicked to add above product into cart");
+    Product.findById({ _id: id })
+        .then((product) => {
+            const userCart = req.user.cart;
+            const cpIndex = userCart.items.findIndex(
+                (item) => item.productId.toString() == product._id.toString()
+            );
+
+            let prodQuantity = 1;
+
+            if (cpIndex > -1) {
+                prodQuantity = userCart.items[cpIndex].quantity + 1;
+                userCart.items[cpIndex].quantity = prodQuantity;
+            } else {
+                userCart.items.push({
+                    productId: product._id,
+                    quantity: prodQuantity,
+                });
+            }
+            req.user.cart = userCart;
+            return req.user.save();
+        })
+        .then((result) => {
+            res.redirect("/shop/cart");
+        })
+        .catch((err) => console.log(err));
 };
 
 //orders page
@@ -89,3 +125,85 @@ exports.getOrders = (req, res, next) => {
         path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_ORDERS_FILE)
     );
 };
+
+// ############################
+
+// exports.postCart = (req, res, next) => {
+//     const id = req.body.id;
+//     console.log(id);
+//     Product.findById({ _id: id })
+//         .then((product) => {
+//             const userCart = req.user.cart;
+//             // console.log(userCart, "aa");
+//             const cpIndex = userCart.items.findIndex(
+//                 (item) => item.productId.toString() == product._id.toString()
+//             );
+//             console.log(cpIndex, "bb");
+
+//             let prodQuantity = 1;
+
+//             if (cpIndex > -1) {
+//                 prodQuantity = userCart.items[cpIndex].quantity + 1;
+//                 console.log(prodQuantity);
+//                 userCart.items[cpIndex].quantity = prodQuantity;
+//                 // console.log(userCart.items[cpIndex].quantity);
+//                 console.log(userCart);
+//             } else {
+//                 userCart.items.push({
+//                     productId: product._id,
+//                     quantity: prodQuantity,
+//                 });
+//             }
+//             req.user.cart = userCart;
+//             return req.user.save();
+//         })
+//         .then((result) => {
+//             res.redirect("/shop/cart");
+//         })
+//         .catch((err) => console.log(err));
+
+//     //1. access the user cart
+//     // let userCart = req.user.cart;
+//     // console.log(userCart.items);
+
+//     // const currentItemIndex = userCart.items.findIndex(
+//     //     (item) => item.productId.toString() === id.toString()
+//     //     // console.log(item.productId.toString() == id.toString(), "aa")
+//     // );
+
+//     // userCart.items.forEach((item, index) => {
+//     //     if (item.productId.toString() === id.toString()) {
+//     //         console.log(index, "bb");
+//     //     }
+//     // });
+
+//     //2. find if product exist
+//     //3. if product exist then increase the quantity
+//     //4. if not push the item to the cart
+//     //5. save the product to user cart
+//     //6. save the cart info in data base as well
+// };
+
+// exports.getCart = (req, res, next) => {
+//     let products = [1, 2, 3, 4, 5, 6, 7, 87];
+//     // console.log(req.user.cart.productId);
+
+//     //in both ways we can populate items in cart
+//     console.log(
+//         req.user.populate("cart.items.productId").then((user) => {
+//             console.log(user.cart.items);
+//         })
+//     );
+
+//     // console.log(
+//     //     req.user.cart.populate("items.productId").then((result) => {
+//     //         console.log("we are printing result");
+//     //         console.log(result);
+//     //     })
+//     // );
+
+//     res.render(
+//         path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_CART_FILE),
+//         { pageTitle: "Cart Information", products: products }
+//     );
+// };

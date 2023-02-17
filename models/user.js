@@ -13,7 +13,7 @@ const userSchema = new Schema({
                     required: true,
                     ref: "Product",
                 },
-                productQty: { type: Number, required: true },
+                quantity: { type: Number, required: true },
             },
         ],
     },

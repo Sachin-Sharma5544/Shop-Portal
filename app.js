@@ -9,11 +9,16 @@ const express = require("express");
 const app = express();
 
 //Project Imports
+//a) Routes
 const adminRoute = require("./routes/admin");
 const shopRoute = require("./routes/shop");
 const userRoute = require("./routes/user");
 
+//b) Database setup
 const connectMongo = require("./database/database");
+
+//c) Models
+const User = require("./models/user");
 
 //Variable Declarations
 const VIEW_ENGINE = "view engine";
@@ -41,6 +46,19 @@ app.use(
         store: store,
     })
 );
+
+app.use((req, res, next) => {
+    if (!req.session.user) {
+        return next();
+    }
+
+    User.findById(req.session.user._id)
+        .then((user) => {
+            req.user = user;
+            next();
+        })
+        .catch((err) => console.log(err));
+});
 
 //this middleware is registered for sending data to all the pages
 app.use((req, res, next) => {
