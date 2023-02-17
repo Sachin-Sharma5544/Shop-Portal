@@ -119,6 +119,19 @@ exports.postCart = (req, res, next) => {
         .catch((err) => console.log(err));
 };
 
+exports.postDeleteCart = (req, res, next) => {
+    const id = req.body.id;
+
+    // facing issue with is part, not sure why it is showing false in string comparision of values
+    // const userCart = req.user.cart;
+    // userCart.items.forEach((item) => {
+    //     console.log(typeof item.productId.toString());
+    //     console.log(typeof id);
+
+    //     console.log(item.productId.toString() === id.toString());
+    // });
+};
+
 //orders page
 exports.getOrders = (req, res, next) => {
     res.render(

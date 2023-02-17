@@ -59,7 +59,8 @@
                                         </div>
                                         <div class="col-2 cart-prod-total-price"><%= product.quantity * product.productId.price %></div>
                                         <div class="col-2 cart-prod-remove">
-                                            <form action="/shop/cart" method="GET">
+                                            <form action="/shop/cart/delete" method="POST">
+                                                <input type="hidden" name="id" id="id" value="<%= product.productId._id %> ">
                                                 <button type="submit" ><i class="fa-solid fa-trash"></i></button>
                                             </form>
                                         </div>
