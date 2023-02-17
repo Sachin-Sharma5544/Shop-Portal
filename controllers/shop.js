@@ -1,6 +1,5 @@
 //Core Module imports
 const path = require("path");
-const mongoose = require("mongoose");
 
 //Project import
 const Product = require("../models/product");
