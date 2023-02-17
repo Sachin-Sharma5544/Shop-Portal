@@ -18,6 +18,7 @@ router.get("/product/:id", shopController.getShopProduct);
 
 //cart page
 router.get("/cart", isAuth, shopController.getCart);
+router.post("/cart", isAuth, shopController.postCart);
 
 //orders page
 router.get("/orders", isAuth, shopController.getOrders);

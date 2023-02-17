@@ -77,6 +77,12 @@ exports.getCart = (req, res, next) => {
     );
 };
 
+exports.postCart = (req, res, next) => {
+    const id = req.body.id;
+    console.log(id);
+    console.log("clicked to add above product into cart");
+};
+
 //orders page
 exports.getOrders = (req, res, next) => {
     res.render(

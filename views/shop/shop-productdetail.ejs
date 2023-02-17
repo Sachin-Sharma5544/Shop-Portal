@@ -29,7 +29,10 @@
                                     <h5 class="card-text"> &#8377;<%= product.price %></h5>
                                     <% if ( isAuthenticated ) { %>
                                         <div class="myCardButton">
-                                            <a href="#" class="btn btn-danger">Add to Cart</a>
+                                            <form action="/shop/cart" method="POST">
+                                                <input type="hidden" name="id" id="id" value="<%= product._id %>">
+                                                <button type="submit" class="btn btn-danger"">Add to Cart</button>
+                                            </form>
                                         </div>
                                     <% } %>
                                 </div>
