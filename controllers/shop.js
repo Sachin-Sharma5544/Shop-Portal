@@ -1,5 +1,6 @@
 //Core Module imports
 const path = require("path");
+const mongoose = require("mongoose");
 
 //Project import
 const Product = require("../models/product");
@@ -120,16 +121,18 @@ exports.postCart = (req, res, next) => {
 };
 
 exports.postDeleteCart = (req, res, next) => {
-    const id = req.body.id;
-
-    // facing issue with is part, not sure why it is showing false in string comparision of values
-    // const userCart = req.user.cart;
-    // userCart.items.forEach((item) => {
-    //     console.log(typeof item.productId.toString());
-    //     console.log(typeof id);
-
-    //     console.log(item.productId.toString() === id.toString());
-    // });
+    const id = req.body.id.trim();
+    //The issue on Cart page is resolved. There was extra space character in the id which was coming from cart page
+    // Using trim method removed extra space and its now working
+    const userCart = req.user.cart;
+    userCart.items = userCart.items.filter(
+        (item) => item.productId.toString() !== id
+    );
+    req.user.cart = userCart;
+    req.user.save((err) => {
+        console.log(err);
+        res.redirect("/shop/cart");
+    });
 };
 
 //orders page
