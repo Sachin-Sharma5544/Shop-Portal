@@ -135,73 +135,97 @@ exports.postDeleteCart = (req, res, next) => {
     //The issue on Cart page is resolved. There was extra space character in the id which was coming from cart page
     // Using trim method removed extra space and its now working
 
-    Product.findOne({ _id: id }).then((product) => {
-        const userCart = { ...req.user.cart };
-        const delProdIndex = userCart.items.findIndex(
-            (item) => item.productId.toString() === id
-        );
-        const delProdQuantity = userCart.items[delProdIndex].quantity;
-        const cartTotalPrice = userCart.cartTotalPrice;
-        const delProdTotalPrice = delProdQuantity * product.price;
-        const updatedTotalCartPrice = cartTotalPrice - delProdTotalPrice;
+    Product.findOne({ _id: id })
+        .then((product) => {
+            const userCart = { ...req.user.cart };
+            const delProdIndex = userCart.items.findIndex(
+                (item) => item.productId.toString() === id
+            );
+            const delProdQuantity = userCart.items[delProdIndex].quantity;
+            const cartTotalPrice = userCart.cartTotalPrice;
+            const delProdTotalPrice = delProdQuantity * product.price;
+            const updatedTotalCartPrice = cartTotalPrice - delProdTotalPrice;
 
-        const updatedItems = userCart.items.filter((_, index) => {
-            return delProdIndex !== index;
+            const updatedItems = userCart.items.filter((_, index) => {
+                return delProdIndex !== index;
+            });
+
+            const updatedCart = {
+                items: updatedItems,
+                cartTotalPrice: updatedTotalCartPrice,
+            };
+
+            req.user.cart = { ...updatedCart };
+
+            req.user.save((err) => {
+                if (err) console.log(err);
+                res.redirect("/shop/cart");
+            });
+        })
+        .catch((err) => {
+            console.log(err);
         });
-
-        const updatedCart = {
-            items: updatedItems,
-            cartTotalPrice: updatedTotalCartPrice,
-        };
-
-        req.user.cart = { ...updatedCart };
-
-        req.user.save((err) => {
-            if (err) console.log(err);
-            res.redirect("/shop/cart");
-        });
-    });
 };
 
 exports.postIncQtyCart = (req, res, next) => {
     const id = req.body.id.trim();
     let updatedCart = { ...req.user.cart };
 
-    const incProductIndex = updatedCart.items.findIndex(
-        (item) => item.productId.toString() === id.toString()
-    );
-    let updateProduct = updatedCart.items[incProductIndex];
-    updateProduct.quantity += 1;
-    updatedCart.items[incProductIndex] = updateProduct;
-    req.user.cart = { ...updatedCart };
+    Product.findOne({ _id: id })
+        .then((product) => {
+            const incProductIndex = updatedCart.items.findIndex(
+                (item) => item.productId.toString() === id.toString()
+            );
+            let updateProduct = updatedCart.items[incProductIndex];
+            updateProduct.quantity += 1;
+            updatedCart.items[incProductIndex] = updateProduct;
 
-    req.user.save((err) => {
-        console.log(err);
-        res.redirect("/shop/cart");
-    });
+            const newUpdatedCartPrice =
+                updatedCart.cartTotalPrice + product.price;
+
+            updatedCart.cartTotalPrice = newUpdatedCartPrice;
+
+            req.user.cart = { ...updatedCart };
+            req.user.save((err) => {
+                console.log(err);
+                res.redirect("/shop/cart");
+            });
+        })
+        .catch((err) => console.log(err));
 };
 
 exports.postDecQtyCart = (req, res, next) => {
     const id = req.body.id.trim();
     const updatedCart = { ...req.user.cart };
-    const decProductIndex = updatedCart.items.findIndex(
-        (item) => item.productId.toString() === id.toString()
-    );
-    let updateProduct = updatedCart.items[decProductIndex];
-    updateProduct.quantity -= 1;
+    let newUpdatedCartPrice;
+    Product.findOne({ _id: id })
+        .then((product) => {
+            const decProductIndex = updatedCart.items.findIndex(
+                (item) => item.productId.toString() === id.toString()
+            );
+            let updateProduct = updatedCart.items[decProductIndex];
+            updateProduct.quantity -= 1;
 
-    if (updateProduct.quantity < 1) {
-        // return res.redirect("/shop/cart");
-        updatedCart.items.splice(decProductIndex, 1);
-    } else {
-        updatedCart.items[decProductIndex] = updateProduct;
-    }
-    req.user.cart = { ...updatedCart };
+            if (updateProduct.quantity < 1) {
+                // return res.redirect("/shop/cart");
+                updatedCart.items.splice(decProductIndex, 1);
+                newUpdatedCartPrice =
+                    updatedCart.cartTotalPrice - product.price;
+            } else {
+                updatedCart.items[decProductIndex] = updateProduct;
+                newUpdatedCartPrice =
+                    updatedCart.cartTotalPrice - product.price;
+            }
 
-    req.user.save((err) => {
-        console.log(err);
-        res.redirect("/shop/cart");
-    });
+            updatedCart.cartTotalPrice = newUpdatedCartPrice;
+
+            req.user.cart = { ...updatedCart };
+            req.user.save((err) => {
+                console.log(err);
+                res.redirect("/shop/cart");
+            });
+        })
+        .catch((err) => console.log(err));
 };
 
 //orders page
