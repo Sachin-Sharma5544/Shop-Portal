@@ -44,7 +44,10 @@ exports.getShopProducts = (req, res, next) => {
                     SHOP_FOLDER,
                     SHOP_PRODUCTS_FILE
                 ),
-                { pageTitle: "Shop Products", products: products }
+                {
+                    pageTitle: "Shop Products",
+                    products: products,
+                }
             );
         })
         .catch((err) => console.log(err));
@@ -74,10 +77,10 @@ exports.getCart = (req, res, next) => {
     req.user
         .populate("cart.items.productId")
         .then((user) => {
+            console.log(user.cart);
             return user.cart.items;
         })
         .then((products) => {
-            // console.log(products);
             res.render(
                 path.join(
                     __dirname,
@@ -86,7 +89,11 @@ exports.getCart = (req, res, next) => {
                     SHOP_FOLDER,
                     SHOP_CART_FILE
                 ),
-                { pageTitle: "Cart Information", products: products }
+                {
+                    pageTitle: "Cart Information",
+                    products: products,
+                    totalCartPrice: req.user.cart.cartTotalPrice,
+                }
             );
         })
         .catch((err) => console.log(err));
@@ -96,7 +103,7 @@ exports.postCart = (req, res, next) => {
     const id = req.body.id;
     Product.findById({ _id: id })
         .then((product) => {
-            const userCart = req.user.cart;
+            const userCart = { ...req.user.cart };
             const cpIndex = userCart.items.findIndex(
                 (item) => item.productId.toString() == product._id.toString()
             );
@@ -112,6 +119,8 @@ exports.postCart = (req, res, next) => {
                     quantity: prodQuantity,
                 });
             }
+
+            userCart.cartTotalPrice += product.price;
             req.user.cart = userCart;
             return req.user.save();
         })
@@ -125,22 +134,33 @@ exports.postDeleteCart = (req, res, next) => {
     const id = req.body.id.trim();
     //The issue on Cart page is resolved. There was extra space character in the id which was coming from cart page
     // Using trim method removed extra space and its now working
-    const userCart = req.user.cart;
-    userCart.items = userCart.items.filter(
-        (item) => item.productId.toString() !== id
-    );
-    req.user.cart = { ...userCart };
-    req.user.save((err) => {
-        console.log(err);
-        res.redirect("/shop/cart");
-    });
-};
 
-//orders page
-exports.getOrders = (req, res, next) => {
-    res.render(
-        path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_ORDERS_FILE)
-    );
+    Product.findOne({ _id: id }).then((product) => {
+        const userCart = { ...req.user.cart };
+        const delProdIndex = userCart.items.findIndex(
+            (item) => item.productId.toString() === id
+        );
+        const delProdQuantity = userCart.items[delProdIndex].quantity;
+        const cartTotalPrice = userCart.cartTotalPrice;
+        const delProdTotalPrice = delProdQuantity * product.price;
+        const updatedTotalCartPrice = cartTotalPrice - delProdTotalPrice;
+
+        const updatedItems = userCart.items.filter((_, index) => {
+            return delProdIndex !== index;
+        });
+
+        const updatedCart = {
+            items: updatedItems,
+            cartTotalPrice: updatedTotalCartPrice,
+        };
+
+        req.user.cart = { ...updatedCart };
+
+        req.user.save((err) => {
+            if (err) console.log(err);
+            res.redirect("/shop/cart");
+        });
+    });
 };
 
 exports.postIncQtyCart = (req, res, next) => {
@@ -182,6 +202,13 @@ exports.postDecQtyCart = (req, res, next) => {
         console.log(err);
         res.redirect("/shop/cart");
     });
+};
+
+//orders page
+exports.getOrders = (req, res, next) => {
+    res.render(
+        path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_ORDERS_FILE)
+    );
 };
 
 // ############################

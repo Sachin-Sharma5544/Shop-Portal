@@ -69,7 +69,7 @@ exports.postSignup = (req, res, next) => {
                         username,
                         email,
                         password: hashPassword,
-                        cart: { items: [] },
+                        cart: { items: [], cartTotalPrice: 0 },
                     });
                     return newUser.save();
                 })
