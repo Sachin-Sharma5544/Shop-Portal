@@ -76,6 +76,7 @@ exports.getCart = (req, res, next) => {
             return user.cart.items;
         })
         .then((products) => {
+            // console.log(products);
             res.render(
                 path.join(
                     __dirname,
