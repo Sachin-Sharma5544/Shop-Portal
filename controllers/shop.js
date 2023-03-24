@@ -170,10 +170,12 @@ exports.postDecQtyCart = (req, res, next) => {
     let updateProduct = updatedCart.items[decProductIndex];
     updateProduct.quantity -= 1;
 
-    if (updateProduct.quantity < 0) {
-        return res.redirect("/shop/cart");
+    if (updateProduct.quantity < 1) {
+        // return res.redirect("/shop/cart");
+        updatedCart.items.splice(decProductIndex, 1);
+    } else {
+        updatedCart.items[decProductIndex] = updateProduct;
     }
-    updatedCart.items[decProductIndex] = updateProduct;
     req.user.cart = { ...updatedCart };
 
     req.user.save((err) => {
