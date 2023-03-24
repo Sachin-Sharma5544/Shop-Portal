@@ -46,13 +46,15 @@
                                         </div>
                                         <div class="col-3 cart-prod-qty">
                                             <span class="decrease-qty">
-                                                <form action="/shop/cart">
+                                                <form action="/shop/cart/decQty" method="post">
+                                                    <input type="hidden" name="id" value="<%= product.productId._id%>">
                                                     <button type="submit">&minus;</button>
                                                 </form>
                                             </span>
                                             <span class="present-quantity"> &nbsp; <%= product.quantity %> &nbsp;</span>
                                             <span class="increase-qty">
-                                                <form action="/shop/cart">
+                                                <form action="/shop/cart/incQty" method="post">
+                                                    <input type="hidden" name="id" value="<%= product.productId._id%>">
                                                     <button type="submit">&plus;</button>
                                                 </form>
                                             </span>
@@ -67,7 +69,14 @@
                                     </div>
 
                                 </div>
+
+
+
                             <%  }) %>
+
+                            <!-- <div class="orderSummary__wrapper"> 
+                                <div class="orderSummary"></div>
+                            </div> -->
 
                         <% } else { %>
                             <p>Your cart is empty. Please add items in cart and enjoy shopping with us.</p>

@@ -1,4 +1,5 @@
 //Core Module imports
+const { default: mongoose } = require("mongoose");
 const path = require("path");
 
 //Project import
@@ -128,7 +129,7 @@ exports.postDeleteCart = (req, res, next) => {
     userCart.items = userCart.items.filter(
         (item) => item.productId.toString() !== id
     );
-    req.user.cart = userCart;
+    req.user.cart = { ...userCart };
     req.user.save((err) => {
         console.log(err);
         res.redirect("/shop/cart");
@@ -140,6 +141,41 @@ exports.getOrders = (req, res, next) => {
     res.render(
         path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_ORDERS_FILE)
     );
+};
+
+exports.postIncQtyCart = (req, res, next) => {
+    const id = req.body.id.trim();
+    let updatedCart = { ...req.user.cart };
+
+    const incProductIndex = updatedCart.items.findIndex(
+        (item) => item.productId.toString() === id.toString()
+    );
+    let updateProduct = updatedCart.items[incProductIndex];
+    updateProduct.quantity += 1;
+    updatedCart.items[incProductIndex] = updateProduct;
+    req.user.cart = { ...updatedCart };
+
+    req.user.save((err) => {
+        console.log(err);
+        res.redirect("/shop/cart");
+    });
+};
+
+exports.postDecQtyCart = (req, res, next) => {
+    const id = req.body.id.trim();
+    const updatedCart = { ...req.user.cart };
+    const decProductIndex = updatedCart.items.findIndex(
+        (item) => item.productId.toString() === id.toString()
+    );
+    let updateProduct = updatedCart.items[decProductIndex];
+    updateProduct.quantity -= 1;
+    updatedCart.items[decProductIndex] = updateProduct;
+    req.user.cart = { ...updatedCart };
+
+    req.user.save((err) => {
+        console.log(err);
+        res.redirect("/shop/cart");
+    });
 };
 
 // ############################
