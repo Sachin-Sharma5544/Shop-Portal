@@ -169,6 +169,10 @@ exports.postDecQtyCart = (req, res, next) => {
     );
     let updateProduct = updatedCart.items[decProductIndex];
     updateProduct.quantity -= 1;
+
+    if (updateProduct.quantity < 0) {
+        return res.redirect("/shop/cart");
+    }
     updatedCart.items[decProductIndex] = updateProduct;
     req.user.cart = { ...updatedCart };
 
