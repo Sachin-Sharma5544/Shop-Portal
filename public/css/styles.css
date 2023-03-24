@@ -2,7 +2,6 @@
 
 .myCard__row .card{
     margin: 1rem 0.5rem;
-
 }
 
 .myCardButton {
@@ -49,6 +48,32 @@
 
 .cart-prod-qty {
     display: flex;
+}
+
+.orderSummary__wrapper {
+    margin: 2rem 0;
+    display: flex;
+    justify-content: end;
+}
+
+.orderSummary {
+    width: 20rem;
+    background-color: rgb(247, 244, 244);
+    padding: 1rem 2rem;
+    border-radius: 15px;
+}
+
+.orderSummary h4 {
+    padding-bottom: 0.3rem;
+    padding-left: 3px;
+    border-bottom: 1px solid rgb(192, 190, 190);
+}
+
+.orderSummary p {
+    padding: 0.5rem 1rem;
+    padding-bottom: 0.2rem;
+    margin-bottom: 0;
+    border-bottom: 1px solid rgb(192, 190, 190);
 }
 
 
