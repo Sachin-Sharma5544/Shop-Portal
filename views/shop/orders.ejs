@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shop Products </title>
+    <title><%= pageTitle %> </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
@@ -15,9 +15,34 @@
         
         <div class="container ">
 
-            <div class="myCart__wrapper">
-                <h1 class="text-center mt-5 mb-5 text-danger">Orders Page</h1>
+            <div class="myOrders__wrapper">
+                <h1 class="text-center mt-5 mb-5 text-danger">Your Orders </h1>
+                <% orders.forEach( (order, index) => { %>
+                    <div class="myOrder__container mt-5 mb-5">
+                        <h4>Order <%= index+1 %> - <%= order._id %> </h4>
+                        <% order.products.forEach( (prod, indx) => { %>
+                            <div class="myOrder__products">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <p><%= indx+1 %>) Name: <%= prod.product.title %></p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p>Quantity: <%= prod.quantity %></p>
+                                    </div>
+                                    <div class="col-2">
+                                        <p>Price: <%= prod.product.price %></p>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
 
+                        <div class="myOrder__productsTotal">
+                            <p><strong>Order total: <%=order.orderTotal%></strong></p>
+                        </div>
+                    </div>
+                    
+                <% }) %>
+                
             </div>
 
         </div>

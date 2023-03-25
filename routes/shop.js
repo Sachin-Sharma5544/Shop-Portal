@@ -25,5 +25,6 @@ router.post("/cart/decQty", isAuth, shopController.postDecQtyCart);
 
 //orders page
 router.get("/orders", isAuth, shopController.getOrders);
+router.post("/order", isAuth, shopController.postOrder);
 
 module.exports = router;

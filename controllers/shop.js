@@ -4,6 +4,7 @@ const path = require("path");
 
 //Project import
 const Product = require("../models/product");
+const Order = require("../models/order");
 
 //Variable Declarations
 const VIEWS_NAME = "views";
@@ -77,7 +78,6 @@ exports.getCart = (req, res, next) => {
     req.user
         .populate("cart.items.productId")
         .then((user) => {
-            console.log(user.cart);
             return user.cart.items;
         })
         .then((products) => {
@@ -230,89 +230,49 @@ exports.postDecQtyCart = (req, res, next) => {
 
 //orders page
 exports.getOrders = (req, res, next) => {
-    res.render(
-        path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_ORDERS_FILE)
-    );
+    Order.find({ "user.userId": req.user._id })
+        .populate("products.product")
+        .then((orders) => {
+            console.log(orders[0].products);
+            return orders;
+        })
+        .then((orders) => {
+            // console.log(orders);
+            res.render(
+                path.join(
+                    __dirname,
+                    "..",
+                    VIEWS_NAME,
+                    SHOP_FOLDER,
+                    SHOP_ORDERS_FILE
+                ),
+                { pageTitle: "Orders Information", orders: orders }
+            );
+        })
+        .catch((err) => console.log(err));
 };
 
-// ############################
-
-// exports.postCart = (req, res, next) => {
-//     const id = req.body.id;
-//     console.log(id);
-//     Product.findById({ _id: id })
-//         .then((product) => {
-//             const userCart = req.user.cart;
-//             // console.log(userCart, "aa");
-//             const cpIndex = userCart.items.findIndex(
-//                 (item) => item.productId.toString() == product._id.toString()
-//             );
-//             console.log(cpIndex, "bb");
-
-//             let prodQuantity = 1;
-
-//             if (cpIndex > -1) {
-//                 prodQuantity = userCart.items[cpIndex].quantity + 1;
-//                 console.log(prodQuantity);
-//                 userCart.items[cpIndex].quantity = prodQuantity;
-//                 // console.log(userCart.items[cpIndex].quantity);
-//                 console.log(userCart);
-//             } else {
-//                 userCart.items.push({
-//                     productId: product._id,
-//                     quantity: prodQuantity,
-//                 });
-//             }
-//             req.user.cart = userCart;
-//             return req.user.save();
-//         })
-//         .then((result) => {
-//             res.redirect("/shop/cart");
-//         })
-//         .catch((err) => console.log(err));
-
-//     //1. access the user cart
-//     // let userCart = req.user.cart;
-//     // console.log(userCart.items);
-
-//     // const currentItemIndex = userCart.items.findIndex(
-//     //     (item) => item.productId.toString() === id.toString()
-//     //     // console.log(item.productId.toString() == id.toString(), "aa")
-//     // );
-
-//     // userCart.items.forEach((item, index) => {
-//     //     if (item.productId.toString() === id.toString()) {
-//     //         console.log(index, "bb");
-//     //     }
-//     // });
-
-//     //2. find if product exist
-//     //3. if product exist then increase the quantity
-//     //4. if not push the item to the cart
-//     //5. save the product to user cart
-//     //6. save the cart info in data base as well
-// };
-
-// exports.getCart = (req, res, next) => {
-//     let products = [1, 2, 3, 4, 5, 6, 7, 87];
-//     // console.log(req.user.cart.productId);
-
-//     //in both ways we can populate items in cart
-//     console.log(
-//         req.user.populate("cart.items.productId").then((user) => {
-//             console.log(user.cart.items);
-//         })
-//     );
-
-//     // console.log(
-//     //     req.user.cart.populate("items.productId").then((result) => {
-//     //         console.log("we are printing result");
-//     //         console.log(result);
-//     //     })
-//     // );
-
-//     res.render(
-//         path.join(__dirname, "..", VIEWS_NAME, SHOP_FOLDER, SHOP_CART_FILE),
-//         { pageTitle: "Cart Information", products: products }
-//     );
-// };
+exports.postOrder = (req, res, next) => {
+    req.user
+        .populate("cart.items.productId")
+        .then((user) => {
+            const products = user.cart.items.map((item) => {
+                return { product: item.productId._id, quantity: item.quantity };
+            });
+            const userObj = { username: user.username, userId: user._id };
+            const order = new Order({
+                products: products,
+                user: userObj,
+                orderTotal: user.cart.cartTotalPrice,
+            });
+            return order.save();
+        })
+        .then(() => {
+            req.user.cart = { items: [], cartTotalPrice: 0 };
+            return req.user.save();
+        })
+        .then(() => {
+            res.redirect("/shop/orders");
+        })
+        .catch((err) => console.log(err));
+};
