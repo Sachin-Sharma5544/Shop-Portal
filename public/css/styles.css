@@ -113,10 +113,17 @@
     box-shadow: 3px 5px 7px rgba(220, 53, 69,0.5);
 }
 
-.myOrder__products p {
+.myOrder__products p,
+.myOrder__products h6,
+.myOrder__products h5
+ {
     margin-bottom: 0.3rem;
     padding-left: 1.5rem;
 }
+.myOrder__products h5 {
+    padding-bottom: 0.5rem;
+}
+
 
 .myOrder__productsTotal p{
     margin-top: 0.5rem;

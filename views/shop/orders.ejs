@@ -20,16 +20,28 @@
                 <% orders.forEach( (order, index) => { %>
                     <div class="myOrder__container mt-5 mb-5">
                         <h4>Order <%= index+1 %> - <%= order._id %> </h4>
+                        <div class="myOrder__products">
+                            <div class="row">
+                                <div class="col">
+                                    <h5>Name</h5>
+                                </div>
+                                <div class="col">
+                                    <h5>Quantity</h5>
+                                </div>
+                                <div class="col">
+                                    <h5>Price</h5>
+                                </div>
+                        </div>
                         <% order.products.forEach( (prod, indx) => { %>
                             <div class="myOrder__products">
                                 <div class="row">
-                                    <div class="col-2">
-                                        <p><%= indx+1 %>) Name: <%= prod.product.title %></p>
+                                    <div class="col">
+                                        <p><%= indx+1 %>) <%= prod.product.title %></p>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col">
                                         <p>Quantity: <%= prod.quantity %></p>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col">
                                         <p>Price: <%= prod.product.price %></p>
                                     </div>
                                 </div>
