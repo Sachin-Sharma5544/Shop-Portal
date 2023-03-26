@@ -28,6 +28,7 @@ const VIEWS_NAME = "views";
 const SERVER_START_MSG = "Server started & listening to port";
 const PUBLIC_FOLDER_NAME = "public";
 const ERROR_FILE_NAME = "404";
+const IMAGES_FOLDER_NAME = "images";
 
 //Middlewares
 
@@ -60,6 +61,7 @@ const fileFilter = (req, file, cb) => {
 
 app.set(VIEW_ENGINE, TEMPLT_ENGINE);
 app.use(express.static(path.join(__dirname, PUBLIC_FOLDER_NAME)));
+app.use("/images", express.static(path.join(__dirname, IMAGES_FOLDER_NAME)));
 app.use(express.urlencoded({ extended: true }));
 app.use(
     multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
