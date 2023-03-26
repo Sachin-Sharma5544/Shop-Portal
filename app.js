@@ -2,6 +2,7 @@
 const path = require("path");
 
 // Third party package imports
+const multer = require("multer");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 require("dotenv").config();
@@ -38,6 +39,7 @@ const store = MongoDBStore({
 app.set(VIEW_ENGINE, TEMPLT_ENGINE);
 app.use(express.static(path.join(__dirname, PUBLIC_FOLDER_NAME)));
 app.use(express.urlencoded({ extended: true }));
+app.use(multer({ dest: "images" }).single("image"));
 app.use(
     session({
         secret: "My Secret is this",
