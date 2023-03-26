@@ -52,14 +52,14 @@ exports.getAddProduct = (req, res, next) => {
 exports.postAddProduct = (req, res, next) => {
     const { title, price, description } = req.body;
     const image = req.file;
-    console.log(image);
-    // const product = new Product({ title, price, imageurl: image, description });
-    // product
-    //     .save()
-    //     .then(() => {
-    //         res.redirect("/admin/products");
-    //     })
-    //     .catch((err) => console.log(err));
+    const imageurl = image.path;
+    const product = new Product({ title, price, imageurl, description });
+    product
+        .save()
+        .then(() => {
+            res.redirect("/admin/products");
+        })
+        .catch((err) => console.log(err));
 };
 
 //--------------------------------------------------------------------------------------------
