@@ -45,10 +45,24 @@ const fileStorage = multer.diskStorage({
     },
 });
 
+const fileFilter = (req, file, cb) => {
+    if (
+        file.mimetype === "image/png" ||
+        file.mimetype === "image/jpg" ||
+        file.mimetype === "image/jpeg"
+    ) {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+};
+
 app.set(VIEW_ENGINE, TEMPLT_ENGINE);
 app.use(express.static(path.join(__dirname, PUBLIC_FOLDER_NAME)));
 app.use(express.urlencoded({ extended: true }));
-app.use(multer({ storage: fileStorage }).single("image"));
+app.use(
+    multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
+);
 app.use(
     session({
         secret: "My Secret is this",
