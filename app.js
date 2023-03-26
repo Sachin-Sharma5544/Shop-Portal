@@ -36,10 +36,19 @@ const store = MongoDBStore({
     collection: "session",
 });
 
+const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "images");
+    },
+    filename: (req, file, cb) => {
+        cb(null, new Date().toISOString() + "-" + file.originalname);
+    },
+});
+
 app.set(VIEW_ENGINE, TEMPLT_ENGINE);
 app.use(express.static(path.join(__dirname, PUBLIC_FOLDER_NAME)));
 app.use(express.urlencoded({ extended: true }));
-app.use(multer({ dest: "images" }).single("image"));
+app.use(multer({ storage: fileStorage }).single("image"));
 app.use(
     session({
         secret: "My Secret is this",
