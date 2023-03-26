@@ -31,6 +31,7 @@
                                 <div class="col">
                                     <h5>Price</h5>
                                 </div>
+                            </div>
                         </div>
                         <% order.products.forEach( (prod, indx) => { %>
                             <div class="myOrder__products">
@@ -49,7 +50,7 @@
                         <% }) %>
 
                         <div class="myOrder__productsTotal">
-                            <p><strong>Order total: <%=order.orderTotal%></strong></p>
+                            <p><strong>Order total: <%= order.orderTotal %></strong></p>
                         </div>
                     </div>
                     
