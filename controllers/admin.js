@@ -84,11 +84,16 @@ exports.getUpdateProduct = (req, res, next) => {
 };
 
 exports.postUpdateProduct = (req, res, next) => {
-    const { id, title, imageurl, description, price } = req.body;
-    Product.findByIdAndUpdate(
-        { _id: id },
-        { $set: { title, imageurl, description, price } }
-    )
+    const { id, title, description, price } = req.body;
+    const image = req.file;
+
+    let updateFields = { title, description, price };
+
+    if (image) {
+        updateFields.imageurl = image.path;
+    }
+
+    Product.findByIdAndUpdate({ _id: id }, { $set: updateFields })
         .then(() => {
             res.redirect("/admin/products");
         })
